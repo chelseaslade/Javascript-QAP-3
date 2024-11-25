@@ -51,6 +51,8 @@ app.post("/login", (request, response) => {
   const user = USERS.find((user) => user.email === email);
 
   if (!!user && bcrypt.compareSync(password, user.password)) {
+    request.session.username = user.username;
+    request.session.role = user.role;
     request.session.email = email;
     return response.redirect("/landing");
   }
@@ -85,14 +87,16 @@ app.get("/", (request, response) => {
 
 // GET /landing - Shows a welcome page for users, shows the names of all users if an admin
 app.get("/landing", (request, response) => {
+  const username = request.session.username;
+
   //Admin page
   if (request.session.role == "admin") {
     console.log("User is admin!");
-    return response.render("landing");
+    return response.render("landing", { username });
   }
 
   //Not admin
-  return response.render("landing");
+  return response.render("landing", { username });
 });
 
 // Start server
