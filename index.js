@@ -99,6 +99,16 @@ app.get("/landing", (request, response) => {
   return response.render("landing", { username });
 });
 
+//Logout Page
+app.post("/logout", (request, response) => {
+  request.session.destroy((error) => {
+    if (error) {
+      return response.status(500).send("Failed to logout user.");
+    }
+    response.redirect("/");
+  });
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);

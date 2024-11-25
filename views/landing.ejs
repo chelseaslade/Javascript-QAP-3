@@ -3,4 +3,7 @@
     <h3>Hello
         <%= username %>!
     </h3>
+    <form action="/logout" method="POST">
+        <button type="submit">Logout</button>
+    </form>
     <%- include('partials/footer') %>
