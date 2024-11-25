@@ -52,7 +52,7 @@ app.post("/login", (request, response) => {
 
   if (!!user && bcrypt.compareSync(password, user.password)) {
     request.session.email = email;
-    return response.redirect("/");
+    return response.redirect("/landing");
   }
 
   //Error logging in, redirect back to login with error message
@@ -84,7 +84,16 @@ app.get("/", (request, response) => {
 });
 
 // GET /landing - Shows a welcome page for users, shows the names of all users if an admin
-app.get("/landing", (request, response) => {});
+app.get("/landing", (request, response) => {
+  //Admin page
+  if (request.session.role == "admin") {
+    console.log("User is admin!");
+    return response.render("landing");
+  }
+
+  //Not admin
+  return response.render("landing");
+});
 
 // Start server
 app.listen(PORT, () => {
