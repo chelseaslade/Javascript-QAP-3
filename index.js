@@ -88,15 +88,17 @@ app.get("/", (request, response) => {
 // GET /landing - Shows a welcome page for users, shows the names of all users if an admin
 app.get("/landing", (request, response) => {
   const username = request.session.username;
+  const role = request.session.role;
 
   //Admin page
-  if (request.session.role == "admin") {
+  if (role === "admin") {
     console.log("User is admin!");
-    return response.render("landing", { username });
+
+    return response.render("landing", { username, users: USERS });
   }
 
   //Not admin
-  return response.render("landing", { username });
+  return response.render("landing", { username, users: null });
 });
 
 //Logout Page

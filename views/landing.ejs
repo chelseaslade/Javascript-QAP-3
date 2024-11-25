@@ -3,7 +3,22 @@
     <h3>Hello
         <%= username %>!
     </h3>
-    <form action="/logout" method="POST">
-        <button type="submit">Logout</button>
-    </form>
-    <%- include('partials/footer') %>
+    <% if (users) { %>
+        <h3>User List: </h3>
+        <% users.forEach((user)=> { %>
+            <ul>
+                <li>
+                    <p>Username: <%= user.username %>
+                    </p>
+                    <p>Email: <%= user.email %>
+                    </p>
+                    <p>Role: <%= user.role %>
+                    </p>
+                </li>
+            </ul>
+            <% })%>
+                <% }%>
+                    <form action="/logout" method="POST">
+                        <button type="submit">Logout</button>
+                    </form>
+                    <%- include('partials/footer') %>
