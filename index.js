@@ -82,6 +82,7 @@ app.post("/signup", (request, response) => {
     username,
     password: bcrypt.hashSync(password, SALT_ROUNDS),
     email,
+    role: "user",
   });
   console.log("New user added!");
   return response.redirect("/");
