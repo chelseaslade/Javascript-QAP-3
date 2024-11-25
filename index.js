@@ -76,7 +76,7 @@ app.get("/", (request, response) => {
   const userEmail = request.session.email;
   const errorMessage = request.query.error || null;
 
-  if (request.session.user) {
+  if (request.session.username) {
     return response.redirect("/landing");
   }
 
