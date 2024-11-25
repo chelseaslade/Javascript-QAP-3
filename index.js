@@ -73,10 +73,17 @@ app.get("/signup", (request, response) => {
 // POST /signup - Allows a user to signup
 app.post("/signup", (request, response) => {
   const { username, email, password } = request.body;
+
+  //Sign up validations
   if (USERS.find((user) => user.username === username)) {
-    return response
-      .status(400)
-      .render("signup", { errorMessage: "Username not available." });
+    return response.status(400).render("signup", {
+      errorMessage: "Username not available. Please select a unique username.",
+    });
+  } else if (USERS.find((user) => user.email === email)) {
+    return response.status(400).render("signup", {
+      errorMessage:
+        "Email already used by a registered user. Please enter a unique email address.",
+    });
   }
   USERS.push({
     username,
