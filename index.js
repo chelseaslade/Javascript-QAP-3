@@ -86,6 +86,8 @@ app.post("/signup", (request, response) => {
         "Email already used by a registered user. Please enter a unique email address.",
     });
   }
+
+  //Add new user to USERS array with data
   USERS.push({
     username,
     password: bcrypt.hashSync(password, SALT_ROUNDS),
@@ -124,6 +126,7 @@ app.get("/landing", (request, response) => {
 
 //Logout Page
 app.post("/logout", (request, response) => {
+  //Destroy session data
   request.session.destroy((error) => {
     if (error) {
       return response.status(500).send("Failed to logout user.");
