@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const session = require("express-session");
 const bcrypt = require("bcrypt");
+const { error } = require("console");
 
 const app = express();
 const PORT = 3000;
@@ -65,12 +66,25 @@ app.post("/login", (request, response) => {
 
 // GET /signup - Render signup form
 app.get("/signup", (request, response) => {
-  response.render("signup");
+  const errorMessage = request.query.error || null;
+  response.render("signup", { errorMessage });
 });
 
 // POST /signup - Allows a user to signup
 app.post("/signup", (request, response) => {
   const { username, email, password } = request.body;
+  if (USERS.find((user) => user.username === username)) {
+    return response
+      .status(400)
+      .render("signup", { errorMessage: "Username not available." });
+  }
+  USERS.push({
+    username,
+    password: bcrypt.hashSync(password, SALT_ROUNDS),
+    email,
+  });
+  console.log("New user added!");
+  return response.redirect("/");
 });
 
 // GET / - Render index page or redirect to landing if logged in
