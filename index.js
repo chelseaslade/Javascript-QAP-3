@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({
-    secret: "my_secure_key",
+    secret: "my_secure_key", //very secure
     resave: false,
     saveUninitialized: true,
   })
@@ -51,6 +51,7 @@ app.post("/login", (request, response) => {
   const { email, password } = request.body;
   const user = USERS.find((user) => user.email === email);
 
+  //If user and pw match, grab data and redirect to landing page
   if (!!user && bcrypt.compareSync(password, user.password)) {
     request.session.username = user.username;
     request.session.role = user.role;
@@ -58,10 +59,10 @@ app.post("/login", (request, response) => {
     return response.redirect("/landing");
   }
 
-  //Error logging in, redirect back to login with error message
-  return response
-    .status(400)
-    .redirect("/login?error=Invalid username or password.");
+  //Error logging in, redirect to login with error message
+  return response.status(400).render("login", {
+    errorMessage: "Invalid email or password.",
+  });
 });
 
 // GET /signup - Render signup form
@@ -112,14 +113,12 @@ app.get("/landing", (request, response) => {
   const username = request.session.username;
   const role = request.session.role;
 
-  //Admin page
+  //Admin role page
   if (role === "admin") {
-    console.log("User is admin!");
-
     return response.render("landing", { username, users: USERS });
   }
 
-  //Not admin
+  //Not admin role (will not show user list)
   return response.render("landing", { username, users: null });
 });
 
